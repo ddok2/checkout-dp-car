@@ -1,0 +1,22 @@
+{
+  "name": "telegram-bot",
+  "version": "1.0.0",
+  "description": "",
+  "engines": {
+    "node": ">= 12.20 <14"
+  },
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "lint": "eslint . ",
+    "test": "jest --coverage"
+  },
+  "keywords": [],
+  "author": "Sungyub NA <darkerkorean@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "as-table": "^1.0.55",
+    "axios": "^0.21.1",
+    "node-telegram-bot-api": "^0.51.0"
+  }
+}
