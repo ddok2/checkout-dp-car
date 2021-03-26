@@ -1,0 +1,9 @@
+name: "get-and-push"
+description: "get data and push msg to telegram"
+author: "Sung"
+branding:
+  icon: "upload-cloud"
+  color: "blue"
+runs:
+  using: "node12"
+  main: "main.js"
