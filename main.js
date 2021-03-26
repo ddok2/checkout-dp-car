@@ -3,9 +3,11 @@ const axios = require('axios')
 const asTable = require('as-table')
   .configure({ maxTotalWidth: 45, delimiter: ' | ' })
 
-const token = process.env.TELEGRAM_TOKEN
-const chatId = process.env.TELEGRAM_CHAT_ID
-const targetUrl = process.env.TARGET_URL
+const {
+  TELEGRAM_TOKEN: token,
+  TELEGRAM_CHAT_ID: chatId,
+  TARGET_URL: targetUrl,
+} = process.env
 
 const main = async () => {
   const bot = new TelegramBot(token, { polling: false })
@@ -14,21 +16,9 @@ const main = async () => {
     const { data } = await axios.get(targetUrl)
 
     if (data.data) {
-      const { list } = data.data
+      let { list } = data.data
 
-      await bot.sendMessage(
-        chatId,
-        `### Raw Data ###
-
-        ${JSON.stringify(list)}
-        `
-      )
-
-      const results = list.filter(({ agencyName }) => {
-        return agencyName === '신대치' || agencyName === '오산'
-      })
-
-      for (let i = 0; i < results.length; i++) {
+      for (let i = 0; i < list.length; i++) {
         const {
           agencyTypeCode,
           agencyCode,
@@ -52,13 +42,27 @@ const main = async () => {
           exteriorColorName,
           distanceOrder,
           ...target
-        } = results[i]
+        } = list[i]
 
-        results[i] = target
+        list[i] = target
       }
 
-      await bot.sendMessage(chatId, asTable(results))
+      list = list.filter(({ modelBasicInfo }) => {
+        return modelBasicInfo.indexOf('디젤') > -1
+      })
 
+      await bot.sendMessage(
+        chatId,
+        `### Raw Data ###
+
+${JSON.stringify(list)}`,
+      )
+
+      const results = list.filter(({ agencyName }) => {
+        return agencyName === '신대치' || agencyName === '오산'
+      })
+
+      await bot.sendMessage(chatId, asTable(results))
     }
 
   } catch (e) {
@@ -67,4 +71,6 @@ const main = async () => {
   }
 }
 
-main().catch(e => console.log(e))
+(async () => {
+  await main()
+})()
