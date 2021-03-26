@@ -22,8 +22,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm install
       - name: Get And Push
-        uses: ./.github/actions/get-and-push
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TARGET_URL: ${{ secrets.TARGET_URL }}
+        run: node main.js
