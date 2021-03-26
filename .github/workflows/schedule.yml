@@ -5,7 +5,7 @@ name: Get Data and push msg to Telegram
 
 on:
   schedule:
-    - cron: "* * * * *"
+    - cron: "* 8 * * *"
 
 jobs:
   get-and-push:
