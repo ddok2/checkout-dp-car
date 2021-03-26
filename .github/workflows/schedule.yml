@@ -5,7 +5,7 @@ name: Get Data and push msg to Telegram
 
 on:
   schedule:
-    - cron: ""
+    - cron: "0 9 * * *"
 
 jobs:
   get-and-push:
@@ -20,6 +20,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm ci
-      - run: npm run build --if-present
-      - run: npm test
+      - run: npm install
+      - name: Get And Push
+        uses: ./.github/actions/get-and-push
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TARGET_URL: ${{ secrets.TARGET_URL }}
